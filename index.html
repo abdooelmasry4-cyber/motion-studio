@@ -89,6 +89,9 @@ footer{border-top:1px solid var(--line); padding-block:28px; color:var(--muted);
 @keyframes climb{0%,8%{transform:translateY(0)}80%,100%{transform:translateY(-300%)}}
 @keyframes mock{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) translateY(-4%)}}
 @keyframes clap{0%,100%{transform:translateY(0)}50%{transform:translateY(-10%)}}
+@keyframes tap{50%{transform:translateY(-35%)}}
+@keyframes lean{0%,100%{transform:none}50%{transform:translate(-5%,2%) rotate(-3deg)}}
+@keyframes push{0%{transform:scale(1)}100%{transform:scale(1.35) translate(-6%,4%)}}
 @keyframes typing{0%,10%{width:0}60%,100%{width:70%}}
 
 
@@ -246,6 +249,19 @@ const sf = (css, c='#fff', pose='stand', anim='') => `<svg viewBox="0 0 40 80" s
 const crowd = (n, x0, y, w, c='var(--c2)', pose='stand', anim='mock 1s ease-in-out infinite') => Array.from({length:n},(_,i)=>sf(`left:${x0+i*w}%;top:${y}%;width:${w*1.1}%;opacity:${.55+i/n*.45};transform-origin:bottom`, i==n-1?'#fff':c, pose, anim.replace('infinite',`${i*.08}s infinite`))).join('');
 const pillar = (steps, css='left:30%;top:30%;width:34%;bottom:0') => P(`${css};background:linear-gradient(90deg,#2b2b2b,#1a1a1a);border-left:2px solid #444;border-right:2px solid #444`, steps.map((t,i)=>P(`left:8%;right:4%;top:${6+i*(88/steps.length)}%;font:800 clamp(8px,1vw,11px) Alexandria;color:#ddd;border-top:1px solid #555;padding-top:4%`, t)).join(''));
 const flag = (css) => P(css, P('left:0;top:0;width:3px;height:100%;background:#ddd')+P('left:3px;top:0;width:140%;height:45%;background:var(--c1);clip-path:polygon(0 0,100% 50%,0 100%);animation:swing 1.4s ease-in-out infinite;transform-origin:left'));
+const flatGuy = (css, lit=true, arms='type') => P(`${css};aspect-ratio:1;animation:lean 3s ease-in-out infinite;transform-origin:30% 100%`,
+  P('left:22%;top:58%;width:86%;height:60%;background:var(--c1);border-radius:46% 46% 0 0') +
+  P('left:40%;top:46%;width:13%;height:16%;background:#D9826A') +
+  P(`left:27%;top:13%;width:38%;height:40%;border-radius:46% 46% 52% 52%;background:${lit?'linear-gradient(90deg,#F7DCCB 0 48%,#EF9A7A 48%)':'#EF9A7A'}`) +
+  P('left:25%;top:7%;width:42%;height:19%;background:#2B2B33;border-radius:55% 55% 25% 35%') +
+  P('left:29%;top:27%;width:13%;height:10%;border:2px solid #fff;border-radius:40%') + P('left:45%;top:27%;width:13%;height:10%;border:2px solid #fff;border-radius:40%') + P('left:41.5%;top:30%;width:4%;height:2px;background:#fff') +
+  P('left:38%;top:41%;width:10%;height:4%;border-bottom:2.5px solid #7a3b2b;border-radius:0 0 50% 50%') +
+  (arms==='up'
+    ? P('left:14%;top:14%;width:12%;height:52%;background:var(--c1);border-radius:20px;transform:rotate(-14deg);animation:bob .6s infinite')+P('left:9%;top:8%;width:14%;aspect-ratio:1;border-radius:50%;background:#EF9A7A;animation:bob .6s infinite')
+    : P('left:-6%;top:74%;width:56%;height:12%;background:var(--c1);border-radius:30px') + P('left:-12%;top:74%;width:14%;height:10%;border-radius:40%;background:#EF9A7A;animation:tap .32s infinite') + P('left:4%;top:80%;width:14%;height:10%;border-radius:40%;background:#EF9A7A;animation:tap .32s .16s infinite')));
+const flatDesk = (screen='') => P('inset:0;background:var(--c3)') + P('inset:0;background:linear-gradient(128deg,transparent 30%,rgba(255,255,255,.10) 30% 64%,transparent 64%)') +
+  P('left:6%;top:30%;width:30%;height:38%;background:var(--c2);border-radius:5px;box-shadow:6px 0 0 rgba(0,0,0,.25)', screen) + P('left:18%;top:68%;width:5%;height:9%;background:#5a5d68') +
+  P('left:8%;top:77%;width:44%;height:2.6%;background:#E9EEF2;border-radius:3px') + P('left:0;right:0;top:79.5%;height:3%;background:#26282f') + P('left:0;right:0;top:82.5%;bottom:0;background:color-mix(in srgb,var(--c3) 70%,#000)');
 /* ---- styles: cats, default speaker, default font, palettes [accent, secondary, background], 3 scenes ---- */
 const S = [
  {id:'PG', n:'ورق المربعات', d:'چارت مرسوم على ورق، والكاميرا ماشية عليه، وتاجات ملونة.', cats:['person','explainer','light'], spk:'three', font:'Alexandria',
@@ -433,6 +449,11 @@ const S = [
   sc:[ pillar(['النجاح','صبر','وقف خسارة','خطة','اتعلّم'])+flag('left:44%;top:21%;width:6%;height:9%')+P('left:20%;top:86%;width:10%;height:90%',sf('left:0;top:0;width:100%','#fff','climb','climb 2.4s ease-in-out infinite'))+P('left:64%;right:0;top:62%;bottom:0;background:#222')+crowd(4,66,46,8)+cap('خطوة <em>خطوة</em>'),
        P('left:0;right:0;top:58%;bottom:0;background:#222')+crowd(6,6,34,14,'var(--c2)','point')+tag('قمار!','top:16%;left:8%;background:#fff')+tag('هتخسر','top:10%;left:42%;background:#fff;animation-delay:.3s')+tag('زوّد لوت','top:20%;right:6%;background:#fff;animation-delay:.6s')+cap('الكل <em>بيتريق</em>'),
        pillar(['النجاح','صبر','وقف خسارة','خطة','اتعلّم'],'left:12%;top:44%;width:34%;bottom:0')+flag('left:36%;top:30%;width:6%;height:14%')+sf('left:20%;top:30%;width:9%','#fff','up','clap .6s ease-in-out infinite')+P('left:50%;right:0;top:64%;bottom:0;background:#222')+crowd(5,52,46,9,'var(--c2)','up','clap .5s ease-in-out infinite')+cap('وصل <em>بالصبر</em>') ]},
+ {id:'FL', n:'كرتون فلات ناعم', d:'شخصية كرتون فلات بألوان هادية، قاعدة قدام الشاشة ونورها على وشه، حركة ناعمة ومُرضية وكاميرا بتقرّب ببطء. ترفيهي ولطيف.', cats:['fun','explainer','dark'], spk:'none', font:'Alexandria',
+  pals:[['#4A8FD0','#DCEBF5','#3A3D47'],['#F5C518','#FFF6D6','#1E1F25'],['#16A34A','#E6F7EC','#2B2F36']],
+  sc:[ flatDesk()+flatGuy('left:34%;top:46%;width:62%')+cap('بيذاكر <em>الشارت</em>'),
+       P('inset:0;animation:push 2.4s ease-out forwards', flatDesk(candles('#16A34A','var(--c1)',14))+flatGuy('left:34%;top:46%;width:62%'))+cap('وبيركّز في <em>كل شمعة</em>'),
+       flatDesk(line('M20 120 L45 95 L60 105 L85 50','#16A34A',3,false))+flatGuy('left:34%;top:46%;width:62%',true,'up')+cap('والخطة <em>نجحت</em>') ]},
 ];
 
 const state = {cat:'all', open:null, pal:0, font:'Alexandria', spk:'three'};
