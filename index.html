@@ -86,6 +86,9 @@ footer{border-top:1px solid var(--line); padding-block:28px; color:var(--muted);
 @keyframes squish{0%,10%{transform:scaleX(.2) scaleY(1.6);opacity:0}25%{transform:scaleX(1.25) scaleY(.85);opacity:1}35%,85%{transform:none;opacity:1}100%{transform:scaleX(1.3);opacity:0}}
 @keyframes orb{to{transform:rotate(360deg)}}
 @keyframes flick{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes climb{0%,8%{transform:translateY(0)}80%,100%{transform:translateY(-300%)}}
+@keyframes mock{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) translateY(-4%)}}
+@keyframes clap{0%,100%{transform:translateY(0)}50%{transform:translateY(-10%)}}
 @keyframes typing{0%,10%{width:0}60%,100%{width:70%}}
 
 
@@ -218,7 +221,7 @@ const FONTS = [
   ['Almarai',800],['El Messiri',700],['Reem Kufi',700],['Noto Kufi Arabic',900],['Marhey',700],['Lemonada',700],
 ];
 const SPK = [['none','من غير ظهور'],['three','3 مرات (أول · نص · آخر)'],['full','طول الفيديو'],['pip','كارت صغير في الركن']];
-const CATS = [['all','الكل'],['person','بظهورك'],['explainer','شرح بدون ظهور'],['3d','3D'],['light','خلفية بيضا'],['dark','خلفية غامقة']];
+const CATS = [['all','الكل'],['person','بظهورك'],['explainer','شرح بدون ظهور'],['3d','3D'],['light','خلفية بيضا'],['dark','خلفية غامقة'],['fun','ترفيهي']];
 // palettes: [c1 accent, c2 secondary, c3 background]
 /* ---- building blocks for previews (each style = 3 scenes that cycle) ---- */
 const P = (css, inner='') => `<div style="${css}">${inner}</div>`;
@@ -239,6 +242,10 @@ const card = (css, inner='') => P(`${css};border-radius:12px;background:#fff;bor
 const glow = (c='var(--c1)', css='inset:0') => P(`${css};background:radial-gradient(circle at 50% 40%,${c},transparent 60%);opacity:.5`);
 const paper = (css, inner='') => P(`${css};background:#efe3c8;box-shadow:0 8px 14px rgba(0,0,0,.35);animation:jit .5s steps(1) infinite`, inner);
 
+const sf = (css, c='#fff', pose='stand', anim='') => `<svg viewBox="0 0 40 80" style="${css};${anim?'animation:'+anim:''};overflow:visible"><g stroke="${c}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="20" cy="10" r="8" fill="${c}" stroke="none"/><path d="M20 20 L20 48"/>${pose=='up'?'<path d="M20 26 L8 6 M20 26 L32 6"/>':pose=='climb'?'<path d="M20 26 L32 14 M20 28 L30 30"/>':pose=='point'?'<path d="M20 26 L38 20 M20 28 L10 40"/>':'<path d="M20 26 L8 42 M20 26 L32 42"/>'}<path d="M20 48 L10 76 M20 48 L30 76"/></g></svg>`;
+const crowd = (n, x0, y, w, c='var(--c2)', pose='stand', anim='mock 1s ease-in-out infinite') => Array.from({length:n},(_,i)=>sf(`left:${x0+i*w}%;top:${y}%;width:${w*1.1}%;opacity:${.55+i/n*.45};transform-origin:bottom`, i==n-1?'#fff':c, pose, anim.replace('infinite',`${i*.08}s infinite`))).join('');
+const pillar = (steps, css='left:30%;top:30%;width:34%;bottom:0') => P(`${css};background:linear-gradient(90deg,#2b2b2b,#1a1a1a);border-left:2px solid #444;border-right:2px solid #444`, steps.map((t,i)=>P(`left:8%;right:4%;top:${6+i*(88/steps.length)}%;font:800 clamp(8px,1vw,11px) Alexandria;color:#ddd;border-top:1px solid #555;padding-top:4%`, t)).join(''));
+const flag = (css) => P(css, P('left:0;top:0;width:3px;height:100%;background:#ddd')+P('left:3px;top:0;width:140%;height:45%;background:var(--c1);clip-path:polygon(0 0,100% 50%,0 100%);animation:swing 1.4s ease-in-out infinite;transform-origin:left'));
 /* ---- styles: cats, default speaker, default font, palettes [accent, secondary, background], 3 scenes ---- */
 const S = [
  {id:'PG', n:'ورق المربعات', d:'چارت مرسوم على ورق، والكاميرا ماشية عليه، وتاجات ملونة.', cats:['person','explainer','light'], spk:'three', font:'Alexandria',
@@ -421,6 +428,11 @@ const S = [
   sc:[ P('inset:0;background:radial-gradient(ellipse at 30% 70%,color-mix(in srgb,var(--c1) 35%,transparent),transparent 55%),radial-gradient(ellipse at 80% 20%,#3a0a14,transparent 60%),var(--c3)')+P('left:-10%;right:-10%;bottom:0;height:30%;background:repeating-linear-gradient(115deg,#3b0d12 0 8px,#ff7a2f 8px 10px,#3b0d12 10px 22px);opacity:.6;filter:blur(1px)')+[[20,52,'var(--c2)'],[44,60,'var(--c1)'],[68,50,'#ffd166']].map(([x,y,c],i)=>P(`left:${x}%;top:${y}%;width:14%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff 10%,${c} 40%,transparent 70%);filter:blur(1px);animation:flick ${1+i*.3}s ease-in-out infinite`)).join('')+P('left:40%;top:40%;padding:2px 8px;border-radius:10px;background:#fff;color:#111;font:700 clamp(9px,1.1vw,12px) Changa;animation:pop 2.4s infinite','إيه ده؟!'),
        P('inset:0;background:radial-gradient(ellipse at 50% 60%,#4a0f1a,var(--c3) 70%)')+[0,1,2,3].map(i=>P(`left:${12+i*20}%;top:${56-(i%2)*8}%;width:16%;height:5%;border-radius:50%;background:#2a2a35;box-shadow:0 0 12px var(--c2),inset 0 -3px 0 #111`)+P(`left:${16+i*20}%;top:${46-(i%2)*8}%;width:8%;height:9%;border-radius:40% 40% 20% 20%;background:var(--c1);box-shadow:0 0 14px var(--c1);animation:bob ${1.2+i*.2}s ease-in-out infinite`)).join(''),
        P('inset:0;background:var(--c3)')+P('left:25%;top:30%;width:50%;aspect-ratio:1;border-radius:50%;border:3px solid var(--c1);box-shadow:0 0 30px var(--c1),inset 0 0 30px var(--c1);animation:pulse 1.6s infinite;transform:perspective(300px) rotateX(60deg)')+P('left:40%;top:36%;width:20%;height:16%;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 40% 30%,#ffe2c4,#ff9b5a);box-shadow:0 0 20px #ff9b5a;animation:bob 1.4s ease-in-out infinite')+Array.from({length:8},(_,i)=>P(`left:${10+((i*37)%80)}%;top:${10+((i*23)%60)}%;width:3%;aspect-ratio:1;background:${i%2?'var(--c2)':'var(--c1)'};clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:spin ${2+i*.3}s linear infinite`)).join('') ]},
+ {id:'ST', n:'سلم المتداول ستيك مان', d:'خلفية سودا وستيك مان أبيض بيتسلق عمود عليه مراحل (اتعلّم، خطة، وقف خسارة، صبر)، والناس على الجنب بتتريق عليه ولما يوصل للعلم بتسقفله. ترفيهي من غير كلام.', cats:['fun','dark'], spk:'none', font:'Alexandria',
+  pals:[['#F5C518','#8A8A8A','#050505'],['#E63946','#8A8A8A','#000000'],['#16A34A','#7A7A7A','#0A0A0A']],
+  sc:[ pillar(['النجاح','صبر','وقف خسارة','خطة','اتعلّم'])+flag('left:44%;top:21%;width:6%;height:9%')+P('left:20%;top:86%;width:10%;height:90%',sf('left:0;top:0;width:100%','#fff','climb','climb 2.4s ease-in-out infinite'))+P('left:64%;right:0;top:62%;bottom:0;background:#222')+crowd(4,66,46,8)+cap('خطوة <em>خطوة</em>'),
+       P('left:0;right:0;top:58%;bottom:0;background:#222')+crowd(6,6,34,14,'var(--c2)','point')+tag('قمار!','top:16%;left:8%;background:#fff')+tag('هتخسر','top:10%;left:42%;background:#fff;animation-delay:.3s')+tag('زوّد لوت','top:20%;right:6%;background:#fff;animation-delay:.6s')+cap('الكل <em>بيتريق</em>'),
+       pillar(['النجاح','صبر','وقف خسارة','خطة','اتعلّم'],'left:12%;top:44%;width:34%;bottom:0')+flag('left:36%;top:30%;width:6%;height:14%')+sf('left:20%;top:30%;width:9%','#fff','up','clap .6s ease-in-out infinite')+P('left:50%;right:0;top:64%;bottom:0;background:#222')+crowd(5,52,46,9,'var(--c2)','up','clap .5s ease-in-out infinite')+cap('وصل <em>بالصبر</em>') ]},
 ];
 
 const state = {cat:'all', open:null, pal:0, font:'Alexandria', spk:'three'};
