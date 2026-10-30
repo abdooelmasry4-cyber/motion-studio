@@ -92,6 +92,42 @@ footer{border-top:1px solid var(--line); padding-block:28px; color:var(--muted);
 @keyframes tap{50%{transform:translateY(-35%)}}
 @keyframes lean{0%,100%{transform:none}50%{transform:translate(-5%,2%) rotate(-3deg)}}
 @keyframes push{0%{transform:scale(1)}100%{transform:scale(1.35) translate(-6%,4%)}}
+
+/* ---- Pinterest-style feed ---- */
+.grid{display:block; columns:4 220px; column-gap:20px}
+@media (max-width:560px){.grid{columns:2; column-gap:12px}}
+.card{display:flex; width:100%; break-inside:avoid; margin:0 0 26px; gap:9px}
+.pvw{position:relative; border-radius:18px; overflow:hidden; transition:transform .25s, box-shadow .25s}
+.card .pvw .pv{border-radius:18px}
+.card:hover .pvw{transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.14)}
+.card:hover .pv{transform:none; box-shadow:none}
+.pvw .hov{position:absolute; inset:0; z-index:20; background:rgba(0,0,0,.25); opacity:0; transition:opacity .2s; display:flex; align-items:flex-start; justify-content:flex-start; padding:12px}
+.card:hover .pvw .hov, .card:focus-visible .pvw .hov{opacity:1}
+.pvw .hov span{background:#E60023; color:#fff; font:700 13px var(--f-d); border-radius:999px; padding:9px 15px}
+.pvw .vc{position:absolute; left:0; right:0; bottom:0; z-index:19; display:flex; justify-content:space-between; align-items:center; padding:28px 10px 9px; direction:ltr; background:linear-gradient(transparent,rgba(0,0,0,.42)); pointer-events:none}
+.pvw .vc b{font:700 11px var(--f-l); color:#fff; background:rgba(0,0,0,.55); border-radius:6px; padding:2px 7px; letter-spacing:.04em}
+.pvw .vc i{width:24px; height:24px; border-radius:50%; background:rgba(0,0,0,.55); display:grid; place-items:center}
+.pvw .vc svg{width:12px; height:12px; fill:#fff}
+.pvw .new{position:absolute; top:14px; right:12px; z-index:19; background:#E60023; color:#fff; font:700 11px var(--f-d); border-radius:999px; padding:4px 10px}
+.card .row h3{font-size:15.5px}
+.card p{font-size:12.5px}
+.det{border:1px solid var(--line); border-radius:14px; padding:10px 14px}
+.det summary{cursor:pointer; font:700 14px var(--f-d)}
+.det ol{margin:10px 0 0; padding-inline-start:20px; display:flex; flex-direction:column; gap:6px; font-size:13.5px; line-height:1.6}
+.det a{display:inline-block; margin-top:8px; font-size:13px; color:var(--muted)}
+@keyframes leaf{to{transform:translate(-40px,700px) rotate(320deg)}}
+@keyframes grainJ{0%{transform:translate(0,0)}25%{transform:translate(-4%,3%)}50%{transform:translate(3%,-5%)}75%{transform:translate(-2%,-2%)}}
+@keyframes slamK{0%,6%{opacity:0; transform:scale(1.8); filter:blur(8px)}18%{opacity:1; transform:scale(.94); filter:blur(0)}24%,90%{opacity:1; transform:scale(1)}100%{opacity:0}}
+@keyframes slamWhip{0%,6%{opacity:0; transform:skewX(-9deg) scale(1.8); filter:blur(8px)}18%{opacity:1; transform:skewX(-9deg) scale(.94); filter:blur(0)}24%,78%{opacity:1; transform:skewX(-9deg) scale(1)}92%,100%{opacity:.5; transform:skewX(-9deg) translateX(-130%); filter:blur(8px)}}
+@keyframes inkR{0%,22%{clip-path:circle(0% at 50% 50%); filter:blur(4px)}45%,92%{clip-path:circle(80% at 50% 50%); filter:blur(0)}100%{clip-path:circle(0% at 50% 50%)}}
+@keyframes shk{40%,100%{transform:none}43%{transform:translate(-3%,2%)}46%{transform:translate(3%,-2%)}49%{transform:translate(-2%,-2%)}52%{transform:translate(2%,1%)}}
+@keyframes wipeR{0%,8%{clip-path:inset(0 0 0 100%)}22%,92%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 0 100%)}}
+@keyframes blurIn{0%,8%{opacity:0; transform:translateY(25%); filter:blur(10px)}30%,88%{opacity:1; transform:none; filter:blur(0)}100%{opacity:0}}
+@keyframes marq{from{transform:translateX(-45%)}to{transform:translateX(10%)}}
+@keyframes whipIn{0%,8%{transform:translateX(60%); filter:blur(8px)}26%,100%{transform:none; filter:none}}
+@keyframes leakX{0%{transform:translate(-40%,-10%)}100%{transform:translate(60%,20%)}}
+@keyframes mpz{0%{scale:1}100%{scale:1.06}}
+@keyframes fadeP{50%{opacity:.6}}
 @keyframes typing{0%,10%{width:0}60%,100%{width:70%}}
 
 
@@ -207,6 +243,7 @@ input:focus-visible, textarea:focus-visible{outline:2px solid var(--ink); outlin
         <div><div class="code" id="drCode"></div><h2 id="drTitle"></h2><p class="note" id="drDesc" style="margin:4px 0 0"></p></div>
         <button class="close" id="drClose" type="button" aria-label="إغلاق">×</button>
       </div>
+      <div class="opt" id="drDetW" hidden><details class="det"><summary>تفاصيل الاستايل (للمونتاج)</summary><ol id="drDet"></ol><a id="drSrc" target="_blank" rel="noopener">المرجع الأصلي على بنترست ↗</a></details></div>
       <div class="opt"><h4>الألوان</h4><div class="pals" id="drPals"></div></div>
       <div class="opt"><h4>خط الكلام على الفيديو</h4><div class="fonts" id="drFonts"></div></div>
       <div class="opt"><h4>ظهورك في الفيديو</h4><div class="chips" id="drSpk"></div></div>
@@ -262,8 +299,58 @@ const flatGuy = (css, lit=true, arms='type') => P(`${css};aspect-ratio:1;animati
 const flatDesk = (screen='') => P('inset:0;background:var(--c3)') + P('inset:0;background:linear-gradient(128deg,transparent 30%,rgba(255,255,255,.10) 30% 64%,transparent 64%)') +
   P('left:6%;top:30%;width:30%;height:38%;background:var(--c2);border-radius:5px;box-shadow:6px 0 0 rgba(0,0,0,.25)', screen) + P('left:18%;top:68%;width:5%;height:9%;background:#5a5d68') +
   P('left:8%;top:77%;width:44%;height:2.6%;background:#E9EEF2;border-radius:3px') + P('left:0;right:0;top:79.5%;height:3%;background:#26282f') + P('left:0;right:0;top:82.5%;bottom:0;background:color-mix(in srgb,var(--c3) 70%,#000)');
+/* ---- helpers for the Pinterest batch (CK, DX, CL, EM, UI, MP) ---- */
+const lf = (r, d=0) => P(`right:${r}%;top:-8%;font-size:clamp(14px,2vw,22px);animation:leaf 2.4s ${d}s linear infinite`, '🍂');
+const grain = () => P(`inset:-50%;z-index:6;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");animation:grainJ .45s steps(4) infinite`);
+const slamT = (html, css='') => P(`left:5%;right:5%;text-align:center;color:#fff;font-weight:800;font-size:clamp(26px,4vw,48px);line-height:1.05;text-shadow:0 3px 0 rgba(0,0,0,.35);animation:slamK 2.4s infinite;${css}`, html);
+const splat = (x, y, d=0, s=16) => P(`left:${x}%;top:${y}%;width:${s*1.6}%;aspect-ratio:1;border-radius:46% 54% 60% 40%/50% 40% 60% 50%;background:#140c00;animation:pop 2.4s ${d}s infinite`);
+const chunk = (t, css='') => P(`left:0;right:0;text-align:center;z-index:4;color:#fff;font-weight:900;font-style:italic;font-size:clamp(44px,7vw,84px);line-height:1;transform:skewX(-9deg);text-shadow:0 2px 0 #d0d0d0,0 4px 0 #a0a0a0,0 6px 0 #6f6f6f,0 12px 16px rgba(0,0,0,.6);animation:slamWhip 2.4s infinite;${css}`, t);
+const emBG = () => P('inset:0;background:radial-gradient(circle at 50% 58%,color-mix(in srgb,var(--c1) 85%,#fff),color-mix(in srgb,var(--c1) 55%,#000) 32%,var(--c3) 74%)') + P('left:0;right:0;top:4%;text-align:center;z-index:7;color:#fff;font-weight:900;font-size:clamp(15px,2vw,22px);line-height:1.2', 'اليوم 3<div style="position:static;font-size:.42em;font-weight:700;opacity:.85">تحدّي: أول عميل في 7 أيام</div>');
+const bub = (t, css, d) => P(`max-width:66%;padding:2.5% 5%;border-radius:18px;font-weight:600;font-size:clamp(10px,1.3vw,14px);animation:pop 2.4s ${d}s infinite;${css}`, t);
+let mpN = 0;
+const mapScene = (cam, which) => { const id = 'mpR' + (mpN++);
+  return P('inset:0;background:var(--c3);perspective:600px', P(`top:-10%;height:120%;width:220%;right:-20%;transform:rotateX(16deg) ${cam};animation:mpz 2.4s ease-in-out infinite`,
+  `<svg viewBox="0 0 880 700" preserveAspectRatio="xMidYMid slice" style="inset:0;width:100%;height:100%"><defs><filter id="${id}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="6" seed="7" result="n"/><feDiffuseLighting in="n" surfaceScale="9" lighting-color="#9a9da3"><feDistantLight azimuth="225" elevation="38"/></feDiffuseLighting><feComponentTransfer><feFuncR type="linear" slope=".55"/><feFuncG type="linear" slope=".57"/><feFuncB type="linear" slope=".62"/></feComponentTransfer></filter></defs><rect width="880" height="700" filter="url(#${id})"/><path d="M0 560 Q200 520 330 600 T600 590 T880 640 V700 H0Z" fill="#05070a" opacity=".9"/><path d="M455 300 L470 520 L520 600" stroke="#05070a" stroke-width="6" fill="none" opacity=".85"/>`+
+  (which==='a'
+    ? `<path d="M250 250 L420 240 L432 268 L440 300 L470 470 L420 470 L250 470 Z" pathLength="300" fill="color-mix(in srgb,var(--c1) 22%,transparent)" stroke="var(--c1)" stroke-width="3" style="stroke-dasharray:300;animation:draw 2.4s infinite;filter:drop-shadow(0 0 5px var(--c1)) drop-shadow(0 0 12px var(--c1))"/><text x="340" y="368" fill="#fff" text-anchor="middle" style="font:900 26px Cairo;animation:fadeup 2.4s infinite">★ مصر</text>`
+    : `<path d="M250 250 L420 240 L432 268 L440 300 L470 470 L420 470 L250 470 Z" fill="none" stroke="var(--c1)" stroke-opacity=".35" stroke-width="2"/><path d="M490 280 L590 255 L660 300 L760 380 L780 450 L700 520 L600 540 L540 470 L505 380 Z" fill="var(--c2)" fill-opacity=".6" stroke="var(--c2)" stroke-width="3" style="filter:drop-shadow(0 0 7px var(--c2));animation:fadeP 2.4s infinite"/><text x="635" y="410" fill="#fff" text-anchor="middle" style="font:900 26px Cairo">★</text>`) + `</svg>`))
+  + P('inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,0,.75))'); };
 /* ---- styles: cats, default speaker, default font, palettes [accent, secondary, background], 3 scenes ---- */
 const S = [
+ {id:'CK', src:'https://pin.it/5qk31muz3', n:'حكاية كاريكاتير 3D', d:'شخصية كاريكاتير 3D مضحكة في عالم خريفي دافي، وشاشات لون واحد أحمر وأصفر بجرين فيلم، وعناوين بتخبط وبقعة حبر بتكشف الصدمة. للقصص والفقاعات والانهيارات.', cats:['explainer','3d','dark','fun'], spk:'none', font:'Changa',
+  pals:[['#FFC81A','#B81A1F','#2F0304'],['#FFD84A','#E8A400','#121010'],['#F5C518','#8E0F12','#1A0F08']],
+  det:['المدة 35–45ث، كل لقطة 1.5–2ث وقطع ناشف — إيقاع ثابت ومتسارع.','الشخصية: كاريكاتير 3D مبالغ (راس كبيرة، شعر منكوش، عيون واسعة)، تظهر في الهوك والنص والآخر. بروميت Nano Banana: "3D caricature, oversized head, exaggerated expression, autumn old town, warm cinematic light, 9:16".','مشاهد واقعية خريفية (شوارع/سوق قديم) بـKen Burns أو push-in بطيء 6–8٪، متولدة بـKling/Veo.','شاشات لون واحد: أحمر غامق radial، أسود دافي، أصفر — وكلها عليها جرين فيلم 20٪ بيتهز.','الخط: Changa ExtraBold مضغوط أبيض، والكلمة المهمة أصفر #FFC81A، العنوان فوق الشاشة.','دخول العنوان slam (من 180٪ + blur لـ100٪) في 0.45ث، والسطر الصغير تحته بيتكتب.','الأرقام: بارات صفرا بجلو بتطلع واحد ورا التاني بارتداد.','الصدمة: خلفية صفرا + بقع حبر سودا pop + الكلام الأسود بيتكشف من النص + هزة شاشة.','رموز في النص: زهرة/بالونة/كيس فلوس 3D (البالونة بتطلع وتفرقع = الفقاعة).','الساوند: whoosh وimpact وding وsplat — كله تحت صوت الراوي، ومن غير مزيكا.'],
+  sc:[ P('inset:0;background:linear-gradient(#7fa6d6,#c7d4dc 40%,#d99a5b 68%,#5e3416)')+lf(12)+lf(48,.7)+lf(80,1.3)+P('left:0;right:0;top:24%;text-align:center;font-size:clamp(70px,11vw,130px);line-height:1;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5));animation:zoom 2.4s infinite','🤪')+grain()+cap('الهوس <em>بدأ</em>'),
+       P('inset:0;background:radial-gradient(circle at 50% 42%,var(--c2),var(--c3) 75%)')+slamT('بدأوا <span style="color:var(--c1)">يشتروا</span>','top:12%')+P('left:16%;right:16%;bottom:16%;height:46%;display:flex;align-items:flex-end;gap:6%',[30,50,72,100].map((h,i)=>`<i style="position:relative;flex:1;height:${h}%;background:linear-gradient(#ffe57a,var(--c1));border-radius:4px 4px 0 0;transform-origin:bottom;box-shadow:0 0 18px rgba(255,200,40,.4);animation:grow 2.4s ${i*.12}s infinite"></i>`).join(''))+grain(),
+       P('inset:0;background:radial-gradient(circle at 50% 50%,#ffe57a,var(--c1) 55%,#a96d00)')+P('inset:0;animation:shk 2.4s infinite',splat(12,40,0)+splat(62,46,.1)+splat(40,54,.2,10)+P('left:0;right:0;top:44%;text-align:center;color:#140c00;font-weight:900;font-size:clamp(26px,4.2vw,50px);animation:inkR 2.4s infinite','الأسعار وقعت'))+grain() ]},
+ {id:'DX', src:'https://pin.it/5xdepQTUs', n:'وثائقي هايب', d:'إنت البطل بتلوين سينمائي باهت، ولابل أحمر جنب وشك، وكلام عملاق وراك، وموبايل بيعدّ الرصيد ودايرة حمرا بتنط. لقصص النجاح «مين ده؟ عملها إزاي؟».', cats:['person','dark'], spk:'full', font:'Cairo',
+  pals:[['#D7263D','#FFFFFF','#1A1A1A'],['#F5C518','#FFFFFF','#141414'],['#3EE07A','#FFFFFF','#121212']],
+  det:['التلوين: desaturate 60٪ + كونتراست عالي، واللون الوحيد المشبع هو لون التأكيد (أحمر #D7263D).','الشخص بخلفية مشالة علشان الكلام العملاق يبقى وراه، وpunch-in 100→112٪ على كل جملة.','اللابل: مستطيل أحمر حاد من غير حواف مدورة، كلام أبيض صغير، بيدخل بمسح من اليمين في 0.35ث.','الكلام العملاق: أبيض Cairo Black بعرض الشاشة بيطلع من تحت ورا الشخص، والرقم/السن تحت بخط مضغوط outline.','كارت بيلف 3D (rotateY من −80° لـ25°) على خلفية مارون غامق والعنوان بيتكتب.','موبايل أسود: "محفظتي" + رقم بيتعد + خط چارت أخضر بيترسم.','دايرة حمرا كبيرة بتنط ورا الشخص على رمادي فاتح، والكلمة الكبيرة سودا حرف حرف.','شباك طيارة جواه كارت داكن وزرار والماوس بيضغط.','قطع ناشف + zoom-through، الساوند riser وwhoosh وتكتكة وclick تحت الصوت.'],
+  sc:[ P('inset:0;background:radial-gradient(circle at 50% 30%,#5a5a5a,var(--c3) 72%)')+P('right:7%;top:13%;z-index:3;background:var(--c1);color:#fff;font-weight:900;font-size:clamp(11px,1.4vw,16px);padding:1% 4%;animation:wipeR 2.4s infinite','من صفر لـ')+P('left:0;right:0;top:17%;text-align:center;color:var(--c2);font-weight:900;font-size:clamp(34px,5.4vw,64px);line-height:1;animation:rise 2.4s infinite','مليونير')+P('inset:0;z-index:2;transform-origin:50% 100%;animation:zoom 2.4s infinite',person('#4a4a4a','left:18%;top:38%;width:64%'))+P('left:0;right:0;bottom:5%;z-index:3;text-align:center;font:400 clamp(28px,4vw,48px) Anton;color:transparent;-webkit-text-stroke:1.5px #fff','26 سنة'),
+       P('inset:0;background:radial-gradient(circle at 50% 30%,#3a3a3a,var(--c3) 72%)')+P('left:22%;top:14%;width:56%;height:72%;border-radius:22px;border:4px solid #2a2a2a;background:#0b0b0b;padding:12% 8%;color:#fff;animation:rise 2.4s infinite',`<div style="position:static;font-size:clamp(9px,1.1vw,12px);opacity:.7">محفظتي</div><div style="position:static;direction:ltr;text-align:right;font:800 clamp(14px,2vw,22px) 'JetBrains Mono',monospace;animation:pop 2.4s infinite">$14,712,498</div>`+line('M5 140 L25 120 L40 128 L55 95 L72 102 L95 60','#3EE07A',3,false)),
+       P('inset:0;background:#d9d9d9')+P('left:15%;top:20%;width:70%;aspect-ratio:1;border-radius:50%;background:var(--c1);animation:pop 2.4s infinite')+P('left:0;right:0;top:9%;text-align:center;color:var(--c1);font-weight:800;font-size:clamp(11px,1.4vw,16px);z-index:3','تريدنج')+P('left:0;right:0;top:14%;text-align:center;color:#111;font-weight:900;font-size:clamp(30px,4.8vw,58px);line-height:1;animation:fadeup 2.4s infinite','كريبتو')+P('inset:0;z-index:2',person('#3a3a3a','left:18%;top:40%;width:64%')) ]},
+ {id:'CL', src:'https://pin.it/2UMMPx23y', n:'مينيمال نضيف', d:'شاشات بيضا فاضية بخط نضيف وكلمات بتظهر من الضباب، وخطوط توصيل رفيعة، وكابشن صغير في نص الشاشة كلمة بكلمة. هادي وشيك للشرح والنصايح.', cats:['light','person','explainer'], spk:'three', font:'Almarai',
+  pals:[['#1A1A1A','#7EE0D1','#F3F3F3'],['#111111','#9DB4FF','#FAFAFA'],['#222222','#F5C518','#F1F0EC']],
+  det:['الخلفية أوف وايت #F3F3F3 وعليها بقعتين blur رمادي/تيل فاتح بيتحركوا ببطء زي قماش حرير.','خط نضيف (IBM Plex Arabic / Almarai) أسود، والكلمة المهمة Bold وأكبر 30٪ — مفيش ألوان صارخة.','كل كلمة بتدخل blur-in لفوق (blur 10px → 0) والسطور بتترص بأوزان مختلفة.','الكابشن على المتكلم صغير (5–6٪ من العرض) في نص الشاشة بالظبط، كلمة أو اتنين في المرة.','كلمة واحدة بس في الفيديو بتاخد تدرج أبيض→تيل وتكبر.','دياجرام: خط أسود رفيع بزوايا قايمة بيترسم بين العنوان والفرع.','الصور جوه كارت زوايا ناعمة وظل خفيف بتدخل pop بارتداد.','المتكلم على خلفية تيل غامق، والإيقاع هادي (2–2.5ث للشاشة) — clicks وpops خفيفة من غير مزيكا.'],
+  sc:[ P('inset:0;background:var(--c3)')+P('left:-30%;top:-10%;width:90%;aspect-ratio:1;border-radius:50%;background:#cfd6d6;filter:blur(30px);animation:morph 4s infinite,bob 3s infinite')+P('left:0;right:0;top:32%;text-align:center;color:var(--c1);font-weight:700;font-size:clamp(17px,2.4vw,28px);line-height:1.35',['خلّي','<b style="font-size:1.35em">فيديوهاتك</b>','تبان نضيفة'].map((t,i)=>`<div style="position:static;animation:blurIn 2.4s ${i*.25}s infinite">${t}</div>`).join('')),
+       P('inset:0;background:var(--c3)')+P('left:0;right:0;top:22%;text-align:center;color:var(--c1);font-weight:800;font-size:clamp(22px,3vw,36px);animation:blurIn 2.4s infinite','أولاً')+line('M50 62 V92 H75 V112',`var(--c1)`,1.4,false)+P('left:58%;right:6%;top:72%;text-align:center;color:var(--c1);font-weight:700;font-size:clamp(14px,2vw,22px);animation:blurIn 2.4s .9s infinite','النص'),
+       P('inset:0;background:linear-gradient(#3b5b5f,#121d1f 75%)')+person('#0e0e0e','left:20%;top:34%;width:60%')+['بنرصّ','السطور',`<span style="position:static;font-size:1.6em;background:linear-gradient(90deg,#fff,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent">متدرّج</span>`].map((w,i)=>P(`left:0;right:0;top:52%;text-align:center;color:#fff;font-weight:700;font-size:clamp(12px,1.6vw,18px);opacity:0;z-index:4;animation:words 2.4s ${i*.8}s infinite`,w)).join('') ]},
+ {id:'EM', src:'https://pin.it/7LiCwk57M', n:'أخضر زمردي كاينتك', d:'كل حاجة أخضر زمردي غامق بجلو، وكلام 3D أبيض مايل تقيل بيخبط ويطير بموشن بلير، وكلمة عملاقة مفرغة بتعدّي ورا. للتحديات والتحفيز «اليوم 1، اليوم 2».', cats:['dark','explainer','fun'], spk:'three', font:'Cairo',
+  pals:[['#16A34A','#FFFFFF','#03160B'],['#F5C518','#FFFFFF','#141005'],['#E63946','#FFFFFF','#140405']],
+  det:['هيدر ثابت فوق طول الفيديو: "اليوم 3" + سطر صغير تحته — بيربط سلسلة الفيديوهات.','الخلفية radial: الأخضر منوّر في النص #18B45E → #0B6633 → شبه أسود على الأطراف.','الكلام المجسّم: Cairo Black مايل (skew −9°) أبيض بطبقات ظل رمادي متدرجة تحته (extrude) + ظل أسود.','كلمة عملاقة outline أبيض 40٪ بحجم 36٪ من العرض، بتمشي أفقي ورا كل حاجة.','الشخص مقصوص وtinted أخضر برِم لايت أخضر، بيدخل من الجنب بـblur.','الانتقالات whip pan بموشن بلير أفقي قوي.','فلوس/كروت بتلف وتطفو بعمق، والختام كأس 3D بجلو دهبي + بادج أخضر منوّر.','الساوند: whoosh مع كل whip وimpact مع الـslam وshimmer مع الكأس — تحت الصوت.'],
+  sc:[ emBG()+P('left:0;top:36%;white-space:nowrap;font-weight:900;font-style:italic;font-size:clamp(60px,10vw,120px);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.4);animation:marq 2.4s linear infinite','تخيّل تخيّل تخيّل')+chunk('حياة','top:42%'),
+       emBG()+P('left:0;right:0;top:20%;text-align:center;color:#dfffe9;font-weight:800;font-style:italic;font-size:clamp(12px,1.6vw,18px);z-index:4','زهقان من')+chunk('شغل 9-5','top:26%;font-size:clamp(30px,4.6vw,54px)')+P('inset:0;animation:whipIn 2.4s infinite',person('#0f2a18','left:22%;top:46%;width:56%;filter:drop-shadow(0 0 10px rgba(60,255,140,.6))'))+P('right:10%;top:54%;font-size:clamp(20px,3vw,34px);animation:swing 1.6s infinite','💵')+P('left:8%;top:64%;font-size:clamp(20px,3vw,34px);animation:swing 1.6s .4s infinite','💵'),
+       emBG()+P('left:0;top:40%;white-space:nowrap;font-weight:900;font-style:italic;font-size:clamp(60px,10vw,120px);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.4);animation:marq 2.4s linear infinite','النجاح النجاح')+P('left:0;right:0;top:30%;text-align:center;font-size:clamp(70px,11vw,130px);line-height:1;filter:drop-shadow(0 0 22px rgba(255,200,60,.7));animation:pop 2.4s infinite','🏆')+P('left:28%;right:28%;bottom:20%;text-align:center;background:var(--c1);color:#fff;font-weight:900;font-size:clamp(12px,1.6vw,18px);padding:1.5% 0;border-radius:6px;box-shadow:0 0 22px var(--c1);animation:pop 2.4s .3s infinite','حرية مالية') ]},
+ {id:'UI', src:'https://pin.it/6Z4EddokF', n:'حكاية بالواجهات', d:'الفكرة بتتحكي بواجهات مألوفة: رسايل شات بتطلع، وبحث بيتكتب لوحده، وكروت ترتيب بتلمع، ولايت ليك سينمائي بين المشاهد. للتسويق والبيزنس.', cats:['explainer','light'], spk:'none', font:'Almarai',
+  pals:[['#0A84FF','#16A34A','#F7F7F7'],['#7C3AED','#F5C518','#F5F3FF'],['#E63946','#16A34A','#F7F7F7']],
+  det:['التبديل بين عالمين: واجهات فاتحة (أبيض/رمادي فاتح) ↔ مشاهد مظلمة سينمائية بلايت ليك برتقالي.','خط نضيف صغير، وأحياناً إيموجي/أيقونة بتتحرك جوه السطر (🌍 بتلف).','الشات: فقاعات رمادي #E5E5EA للطرف التاني وأزرق #0A84FF ليك، بتدخل pop كل 0.5ث + نقط typing.','البحث: بار أبيض كبسولة بظل ناعم، الكلام بيتكتب حرف حرف بكيرسر وبعدها سطور نتايج.','كروت ترتيب: لوحة داكنة ببوردر رفيع، صفوف بتدخل blur-in، وبادج أخضر بينبض بجلو.','لقطات واقعية: موبايل وضع كاميرا، ورق بضوء شمس مايل، flat-lay على ورق مربعات أخضر فاتح.','أحياناً مشهد أفقي 16:9 جوه الإطار الطولي بأسود فوق وتحت — جزء من الستايل.','الساوند: ping الرسايل وتكتكة الكيبورد وclick — من غير مزيكا.'],
+  sc:[ P('inset:0;background:var(--c3)')+bub('الناس مش بتشتري منتجات','left:6%;top:22%;background:#e5e5ea;color:#111',0)+bub('بتشتري من ناس','right:6%;top:36%;background:var(--c1);color:#fff',.4)+bub('بيثقوا فيهم ✨','left:6%;top:50%;background:#e5e5ea;color:#111',.8)+P('left:6%;top:64%;background:#e5e5ea;border-radius:20px;padding:3% 6%;display:flex;gap:5px;animation:pulse 1s infinite','<i style="position:static;width:6px;height:6px;border-radius:50%;background:#8e8e93"></i><i style="position:static;width:6px;height:6px;border-radius:50%;background:#8e8e93"></i><i style="position:static;width:6px;height:6px;border-radius:50%;background:#8e8e93"></i>'),
+       P('inset:0;background:#f1f3f5')+P('left:8%;right:8%;top:38%;height:9%;background:#fff;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.12);animation:pop 2.4s infinite')+P('right:14%;top:40.6%;height:4%;overflow:hidden;white-space:nowrap;color:#222;font-weight:600;font-size:clamp(10px,1.3vw,14px);border-left:2px solid #222;animation:typing 2.4s steps(14) infinite','🔍 ملف افتر افكتس')+[80,60,70].map((w,i)=>P(`left:12%;width:${w*.76}%;top:${54+i*5}%;height:2%;background:#d8dde3;border-radius:6px;animation:fadeup 2.4s ${.9+i*.12}s infinite`)).join(''),
+       P('inset:0;background:#0d0d0d')+P('left:-40%;top:-20%;width:120%;height:120%;background:radial-gradient(circle,rgba(255,150,60,.7),rgba(255,60,120,.3) 35%,transparent 60%);filter:blur(16px);mix-blend-mode:screen;animation:leakX 2.4s ease-in-out infinite')+P('left:8%;right:8%;top:22%;background:#14171c;border:1px solid #2a2f37;border-radius:14px;padding:5%;color:#e7e9ee;font-weight:700;font-size:clamp(10px,1.3vw,14px)','<div style="position:static">الترتيب · أفضل عميل</div>'+['+300','+180','+90'].map((v,i)=>`<div style="position:static;display:flex;justify-content:space-between;align-items:center;padding:7% 0 0;margin-top:5%;border-top:1px solid #232830;animation:blurIn 2.4s ${i*.2}s infinite">عميل ${i+1}<b style="position:static;background:var(--c2);color:#fff;border-radius:99px;padding:1px 8px;box-shadow:0 0 12px var(--c2);animation:pulse 1s infinite">${v}</b></div>`).join('')) ]},
+ {id:'MP', src:'https://pin.it/3qeMaDxVF', n:'خريطة تضاريس 3D', d:'خريطة تضاريس رمادي غامقة بإحساس 3D، والدولة بتنوّر بحدود متوهجة وشعارها في النص، والكاميرا بتتنقل لدولة تانية بتتلوّن. للجغرافيا والسياسة واقتصاد الدول.', cats:['explainer','dark','3d'], spk:'none', font:'Cairo',
+  pals:[['#5AA9FF','#E7C27A','#0A0B0D'],['#F5C518','#E63946','#0A0B0D'],['#16A34A','#5AA9FF','#0B0D0B']],
+  det:['الخريطة: تضاريس relief رمادي (البحر أسود #05070A والجبال رمادي فاتح بإضاءة من فوق شمال) — GeoLayers أو صورة DEM.','الكاميرا مايلة rotateX ~16° فوق الخريطة، push-in بطيء + pan سلس بـease in-out، من غير قطع.','الدولة الأولى: حدود زرقا #5AA9FF بجلو مزدوج بتترسم في 1.2ث، وبعدين fill أزرق 22٪ والشعار يظهر في النص.','الدولة التانية: fill دهبي #D6AA5A بشفافية 60٪ وحدود دهبي منوّرة، بتظهر بعد ما الأولى تبهت.','اسم الدولة جنب الشعار بخط Cairo Black، وفينيت غامق حوالين الكادر.','الساوند: whoosh ناعم مع الـpan وshimmer مع رسم الحدود — تحت الصوت.'],
+  sc:[ mapScene('translateX(-22%) scale(1.15)','a'), mapScene('translateX(14%) scale(1.15)','b'), mapScene('translateX(18%) scale(1.45)','b')+cap('<em>السعودية</em>') ]},
  {id:'PG', n:'ورق المربعات', d:'چارت مرسوم على ورق، والكاميرا ماشية عليه، وتاجات ملونة.', cats:['person','explainer','light'], spk:'three', font:'Alexandria',
   pals:[['#F5C518','#E63946','#F2F1EC'],['#16A34A','#111111','#F2F1EC'],['#2563EB','#E63946','#F4F6FA']],
   sc:[ gridBG('rgba(0,0,0,.13)',16,-5)+candles()+line('M15 110 L80 50')+tag('ENTRY','top:16%;right:10%')+cap('بلوت <em>0.05</em>','color:#111;font-weight:900'),
@@ -468,8 +555,8 @@ function renderTabs(){
 }
 function renderGrid(){
   const list = S.filter(s => state.cat==='all' || s.cats.includes(state.cat));
-  $('grid').innerHTML = list.map(s => `<button class="card" type="button" data-id="${s.id}">
-    ${pvHTML(s, 0, s.font)}
+  $('grid').innerHTML = list.map(s => `<button class="card" type="button" data-id="${s.id}" aria-label="افتح قالب ${s.n}">
+    <div class="pvw">${pvHTML(s, 0, s.font)}${s.src ? '<span class="new">جديد</span>' : ''}<div class="hov"><span>شوف القالب</span></div><div class="vc"><i><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg></i><b>0:07</b></div></div>
     <div class="row"><h3>${s.n}</h3><span class="code">${s.id}</span></div>
     <p>${s.d}</p>
     <div class="dots">${s.pals[0].map(c=>`<i style="background:${c}"></i>`).join('')}</div>
@@ -479,6 +566,7 @@ function renderGrid(){
 function openDrawer(id){
   const s = S.find(x => x.id===id);
   state.open = id; state.pal = 0; state.font = s.font; state.spk = s.spk;
+  $('drDetW').hidden = !s.det; if (s.det){ $('drDet').innerHTML = s.det.map(x => `<li>${x}</li>`).join(''); $('drSrc').href = s.src || '#'; $('drSrc').hidden = !s.src; }
   $('drTitle').textContent = s.n; $('drCode').textContent = s.id; $('drDesc').textContent = s.d; $('drDone').innerHTML = '';
   renderDrawer();
   $('scrim').hidden = false; $('drawer').hidden = false; document.body.style.overflow = 'hidden';
@@ -499,7 +587,7 @@ function renderDrawer(){
   $('drSpk').querySelectorAll('.chip').forEach(b => b.onclick = () => {state.spk = b.dataset.k; renderDrawer();});
 }
 function orderText(o){
-  return `طلب فيديو جديد\nالقالب: ${o.styleName} (${o.style})\nالألوان: ${o.palette.join(' · ')}\nخط الكلام: ${o.font}\nالظهور: ${o.speakerLabel}\nالموضوع: ${o.title || '—'}\nملاحظة: ${o.note || '—'}`;
+  return `طلب فيديو جديد\nالقالب: ${o.styleName} (${o.style})\nالألوان: ${o.palette.join(' · ')}\nخط الكلام: ${o.font}\nالظهور: ${o.speakerLabel}\nالموضوع: ${o.title || '—'}\nملاحظة: ${o.note || '—'}` + ((S.find(x => x.id===o.style)||{}).det ? '\n\nتفاصيل الاستايل:\n- ' + S.find(x => x.id===o.style).det.join('\n- ') : '');
 }
 let db = null;
 $('drOrder').onclick = async () => {
